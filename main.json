@@ -1,0 +1,20 @@
+{
+    "name": "Test",
+    "age": 25,
+    "food": {
+        "like": "LIKE",
+        "dislike": "cream cheese"
+    },
+    "book": {
+        "adventure": {
+            "title": "Sherlock Holmes",
+            "autor": "Arthur Conan",
+            "year": 1886
+        },
+        "romance": {
+            "title": "Proud and Prejudice",
+            "autor": "Jennifer Austen",
+            "year": 1786
+        }
+    }
+}
