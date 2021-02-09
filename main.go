@@ -71,15 +71,15 @@ func jsonTreeIterate(r *reflect.Value) {
 				// fmt.Println("Global: Faço algo, criar função")
 			case "env":
 				// pega o nome do campo e o valor dele
-				nameEl := r.FieldByName(t.Field(i).Name)
+				value := r.FieldByName(t.Field(i).Name)
 
 				// pegar o valor do campo da env
-				env := os.Getenv(nameEl.String())
+				env := os.Getenv(value.String())
 
 				// se estiver vazia diz o campo que tentou buscar, para não ter log de dados que possam ser sensíveis
 				if env == "" {
 					fmt.Println("Valor da env, encontra-se vazio! Valor do atributo para conferência:",
-						nameEl.String())
+						value.String())
 				}
 				r.FieldByName(t.Field(i).Name).SetString(env)
 			}
