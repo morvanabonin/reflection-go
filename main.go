@@ -33,32 +33,35 @@ func LoadConfig(path string, c interface{}) (err error) {
 		fmt.Println("O caminho do arquivo passado está vazio.")
 	}
 
-	err = json.Unmarshal(bytesFile, &c)
+	// chamada do unmarshal com o bytes do arquivo e o endereço de memória da estrutura
+	err = json.Unmarshal(bytesFile, c)
 	t := reflect.ValueOf(c)
-	parserConfig(t, 0)
+	parserConfig(&t, 0)
 
 	return
 }
 
-func parserConfig(t reflect.Value, depth int)  {
+func parserConfig(t *reflect.Value, depth int)  {
 	// switch do kind para saber tipo
 	switch t.Kind() {
 	case reflect.Ptr:
 		//se é um elemento do tipo ponteiro, chama a parseConfig novamente, descendo um nível
-		parserConfig(t.Elem(), depth+1)
+		temp := t.Elem()
+		parserConfig(&temp, depth+1)
 	case reflect.Struct:
 		// Itera sobre a árvore json
 		jsonTreeIterate(t)
 	}
 }
 
-func jsonTreeIterate(r reflect.Value) {
+func jsonTreeIterate(r *reflect.Value) {
+	fmt.Println(r)
 	t := r.Type()
 	for i := 0; i < r.NumField(); i++ {
 		f := r.Field(i)
 		if f.Kind().String() == "struct" {
-			node := reflect.ValueOf(f.Interface())
-			jsonTreeIterate(node)
+			node := reflect.Indirect(f)
+			jsonTreeIterate(&node)
 		}
 
 		field := t.Field(i)
@@ -69,6 +72,7 @@ func jsonTreeIterate(r reflect.Value) {
 			case "env":
 				// pega o nome do campo e o valor dele
 				nameEl := r.FieldByName(t.Field(i).Name)
+
 				// pegar o valor do campo da env
 				env := os.Getenv(nameEl.String())
 
@@ -77,6 +81,7 @@ func jsonTreeIterate(r reflect.Value) {
 					fmt.Println("Valor da env, encontra-se vazio! Valor do atributo para conferência:",
 						nameEl.String())
 				}
+				r.FieldByName(t.Field(i).Name).SetString(env)
 			}
 		}
 	}
