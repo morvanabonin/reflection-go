@@ -1,9 +1,5 @@
 package main
 
-import (
-	. "github.com/morvanabonin/reflection-go/config"
-)
-
 var TestJson TestJsonT
 
 func main() {
