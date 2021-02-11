@@ -3,13 +3,13 @@ package main
 type Adventure struct {
 	Title string `json:"title" context:"global"`
 	Autor string `json:"autor"`
-	Year  uint8 `json:"year"`
+	Year  uint16 `json:"year"`
 }
 
 type Romance struct {
 	Title string `json:"title"`
 	Autor string `json:"autor"`
-	Year  uint8 `json:"year"`
+	Year  uint16 `json:"year"`
 }
 
 type Book struct {
